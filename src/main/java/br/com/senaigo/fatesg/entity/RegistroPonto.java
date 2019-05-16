@@ -1,5 +1,7 @@
 package br.com.senaigo.fatesg.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.springframework.hateoas.ResourceSupport;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,12 +26,17 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper=false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegistroPonto extends ResourceSupport{	
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class RegistroPonto extends ResourceSupport implements Serializable{	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue (strategy = GenerationType.AUTO)
 	@Column(name="id")
-	private Integer idRegistro;	
+	private Long idRegistro;	
 	private String data;
 	private Long idFuncionario;
 	private Long idcodigoJornadaTrabalho;

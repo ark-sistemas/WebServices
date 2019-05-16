@@ -13,7 +13,8 @@ import br.com.senaigo.fatesg.service.RegistroPontoService;
 
 @Service
 public class RegistroPontoServiceImpl implements RegistroPontoService{
-	
+	RegistroPonto registro = new RegistroPonto();
+
 	@Autowired
 	public RegistroPontoRepository registroRepository;
 	
@@ -25,9 +26,9 @@ public class RegistroPontoServiceImpl implements RegistroPontoService{
 	}
 
 	@Override
-	public RegistroPonto get(Integer id) {
-		Object entity = registroRepository.findById(new Long(id));
-		return (RegistroPonto) entity;
+	public RegistroPonto get(Long id) {
+		 registro =  registroRepository.getOne(id);
+		 return registro;
 	}
 
 	@Override

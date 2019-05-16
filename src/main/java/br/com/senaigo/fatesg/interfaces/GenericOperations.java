@@ -5,7 +5,7 @@ import java.util.List;
 public interface GenericOperations<E> {
 	
 	E post(E entity);
-	E get(Integer id);
+	E get(Long id);
 	void put(E entity);
 	void delete(E entity);
 	void patch(E entity);
