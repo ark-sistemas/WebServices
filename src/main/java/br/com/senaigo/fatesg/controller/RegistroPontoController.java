@@ -5,6 +5,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.MediaTypes;
@@ -26,15 +28,18 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.senaigo.fatesg.entity.RegistroPonto;
 import br.com.senaigo.fatesg.interfaces.GenericOperationsController;
 import br.com.senaigo.fatesg.service.RegistroPontoService;
-import ch.qos.logback.classic.Logger;
 
 @RestController
 @RequestMapping("/registro")
 public class RegistroPontoController implements GenericOperationsController<RegistroPonto>{
 	
 	
+	Logger log = LoggerFactory.getLogger(RegistroPontoController.class);
+
+	
 	@Autowired
 	public RegistroPontoService registroService;
+	
 	
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
 			 				MediaType.APPLICATION_XML_VALUE},
@@ -43,17 +48,20 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 							MediaTypes.HAL_JSON_VALUE})
 	@ResponseStatus(HttpStatus.CREATED)
 	public Resource<RegistroPonto> post(@RequestBody RegistroPonto entity) {
-		if(entity.getIdFuncionario() != null ) {
-			System.out.println("id do Funcionario: "+ entity.getIdFuncionario());
+		
+
+		try {
 			registroService.post(entity);
+			log.info("Registro inserido");
 			
 			Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
 			Resource<RegistroPonto> result = new Resource<RegistroPonto>(entity,link);
 			
 			return result;
-			
+		} catch (Exception e) {
+			log.error(String.format("Erro ao executar o método POST.\nMensagem: %s",e.getMessage()));
 		}
-		System.out.println("Entidade Null");
+			
 		return null;
 	}
 
@@ -63,12 +71,14 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 							MediaType.APPLICATION_XML_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void put(@RequestBody RegistroPonto entity) {
-		if(entity.getIdFuncionario() != null) {
 			
-			registroService.put(entity);
-			Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
-		}
-		System.out.println("Entidade Null");
+			try {
+				registroService.put(entity);
+				log.info(String.format("Registro atualizado: %s",entity.toString()));
+				//Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
+			} catch (Exception e) {
+				log.error(String.format("Erro ao executar o método PUT.\nMensagem: %s",e.getMessage()));
+			}
 	}
 
 
@@ -77,28 +87,40 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 							MediaType.APPLICATION_XML_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@RequestBody RegistroPonto entity) {
-		registroService.delete(entity);
+		try {
+			registroService.delete(entity);
+			log.info(String.format("Registro(s) deletado(s): %s",entity.toString()));
+		} catch (Exception e) {
+			log.error(String.format("Erro ao executar o método DELETE.\nMensagem: %s",e.getMessage()));
+		}
 		
 	}
 
 
 	@Override
-	@GetMapping(value = "/{get}",produces = {MediaType.APPLICATION_JSON_VALUE,
-							MediaTypes.HAL_JSON_VALUE})
+	@GetMapping(value = "/{get}/",produces = {MediaType.APPLICATION_JSON_VALUE,
+											  MediaTypes.HAL_JSON_VALUE})
 	@ResponseStatus(HttpStatus.OK)
 	public Resources<RegistroPonto> get() {
-		List<RegistroPonto> allRegistros = registroService.get();
+		List<RegistroPonto> allRegistros = new ArrayList<RegistroPonto>();
+		allRegistros.addAll(registroService.get());
 		List<RegistroPonto> all = new ArrayList<RegistroPonto>();
-		for(RegistroPonto registro : allRegistros) {
-			String registroId = String.valueOf(registro.getIdRegistro());
-			Link selfLink = linkTo(RegistroPonto.class).slash(registroId).withSelfRel();
-			registro.add(selfLink);
-			all.add(registro);
+		try {
+			for(RegistroPonto registro : allRegistros) {
+				String registroId = String.valueOf(registro.getIdRegistro());
+				Link selfLink = linkTo(RegistroPonto.class).slash(registroId).withSelfRel();
+				registro.add(selfLink);
+				all.add(registro);
+			}
+			
+			Link link = linkTo(RegistroPonto.class).withSelfRel();
+			Resources<RegistroPonto> result = new Resources<RegistroPonto>(all,link);
+			log.info(String.format("Registro(s) recuperados(s): %s",all.toString()));
+			return result;
+		} catch (Exception e) {
+			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s",e.getMessage()));
 		}
-		
-		Link link = linkTo(RegistroPonto.class).withSelfRel();
-		Resources<RegistroPonto> result = new Resources<RegistroPonto>(all,link);
-		return result;
+		return null;
 	}
 	
 	@Override
@@ -108,11 +130,17 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 	@ResponseStatus(HttpStatus.OK)
 	public Resource<RegistroPonto> get(@PathVariable Long id) {
 		
-		RegistroPonto registro = registroService.get(id);
-		  
-	    Link link = linkTo(RegistroPonto.class).slash(registro).withSelfRel();
-	    Resource<RegistroPonto> result = new Resource<RegistroPonto>(registro, link);
-	    return result;
+		try {
+			RegistroPonto registro = registroService.get(id);
+			  
+			Link link = linkTo(RegistroPonto.class).slash(registro).withSelfRel();
+			Resource<RegistroPonto> result = new Resource<RegistroPonto>(registro, link);
+			log.info(String.format("Registro recuperado: %s",result.toString()));
+			return result;
+		} catch (Exception e) {
+			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s",e.getMessage()));
+		}
+		return null;
 	}
 
 
@@ -122,8 +150,13 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void patch(@RequestBody RegistroPonto entity) {
 		
-		registroService.patch(entity);
-		Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
+		try {
+			registroService.patch(entity);
+			log.info(String.format("Registro atualizado: %s",entity.toString()));
+			Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
+		} catch (Exception e) {
+			log.error(String.format("Erro ao executar o método PATCH.\nMensagem: %s",e.getMessage()));
+		}
 		
 	}
 }
