@@ -42,7 +42,7 @@ public class JustificativaController implements GenericOperationsController<Just
 	@Autowired
 	public JustificativaService registroService;
 	
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
+	@PostMapping(value = "/{post}",consumes = {MediaType.APPLICATION_JSON_VALUE,
 			 				MediaType.APPLICATION_XML_VALUE},
 				produces = {MediaType.APPLICATION_JSON_VALUE,
 							MediaType.APPLICATION_XML_VALUE,

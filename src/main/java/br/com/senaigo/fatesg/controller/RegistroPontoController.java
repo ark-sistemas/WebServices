@@ -124,7 +124,7 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 	}
 	
 	@Override
-	@GetMapping(value = "/{registro}/{id}",produces = {MediaType.APPLICATION_JSON_VALUE,
+	@GetMapping(value = "/get/{id}",produces = {MediaType.APPLICATION_JSON_VALUE,
 											MediaType.APPLICATION_XML_VALUE,
 											MediaTypes.HAL_JSON_VALUE})
 	@ResponseStatus(HttpStatus.OK)
