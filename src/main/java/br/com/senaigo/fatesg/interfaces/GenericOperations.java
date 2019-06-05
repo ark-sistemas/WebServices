@@ -6,6 +6,7 @@ public interface GenericOperations<E> {
 	
 	E post(E entity);
 	E get(Long id);
+	void put(String email);
 	void put(E entity);
 	void delete(E entity);
 	void patch(E entity);

@@ -191,4 +191,10 @@ public class JustificativaServiceImpl implements JustificativaService {
 		}
 	}
 
+	@Override
+	public void put(String email) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

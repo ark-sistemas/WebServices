@@ -26,19 +26,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.senaigo.fatesg.entity.RegistroPonto;
+import br.com.senaigo.fatesg.entity.Usuario;
 import br.com.senaigo.fatesg.interfaces.GenericOperationsController;
-import br.com.senaigo.fatesg.service.RegistroPontoService;
+import br.com.senaigo.fatesg.service.UsuarioService;
 
 @RestController
-@RequestMapping("/registro")
-public class RegistroPontoController implements GenericOperationsController<RegistroPonto>{
+@RequestMapping("/usuario")
+public class UsuarioController implements GenericOperationsController<Usuario>{
 	
 	
-	Logger log = LoggerFactory.getLogger(RegistroPontoController.class);
+	Logger log = LoggerFactory.getLogger(UsuarioController.class);
 
 	
 	@Autowired
-	public RegistroPontoService registroService;
+	public UsuarioService service;
 	
 	
 	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
@@ -47,15 +48,15 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 							MediaType.APPLICATION_XML_VALUE,
 							MediaTypes.HAL_JSON_VALUE})
 	@ResponseStatus(HttpStatus.CREATED)
-	public Resource<RegistroPonto> post(@RequestBody RegistroPonto entity) {
+	public Resource<Usuario> post(@RequestBody Usuario entity) {
 		
 
 		try {
-			registroService.post(entity);
+			service.post(entity);
 			log.info("Registro inserido");
 			
-			Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
-			Resource<RegistroPonto> result = new Resource<RegistroPonto>(entity,link);
+			Link link = linkTo(Usuario.class).slash(entity.getId()).withSelfRel();
+			Resource<Usuario> result = new Resource<Usuario>(entity,link);
 			
 			return result;
 		} catch (Exception e) {
@@ -70,11 +71,11 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 	@PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
 							MediaType.APPLICATION_XML_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void put(@RequestBody RegistroPonto entity) {
+	public void put(@RequestBody String email) {
 			
 			try {
-				registroService.put(entity);
-				log.info(String.format("Registro atualizado: %s",entity.toString()));
+				service.put(email);
+				log.info(String.format("Registro atualizado: %s",email));
 				//Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
 			} catch (Exception e) {
 				log.error(String.format("Erro ao executar o método PUT.\nMensagem: %s",e.getMessage()));
@@ -86,9 +87,9 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 	@DeleteMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
 							MediaType.APPLICATION_XML_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@RequestBody RegistroPonto entity) {
+	public void delete(@RequestBody Usuario entity) {
 		try {
-			registroService.delete(entity);
+			service.delete(entity);
 			log.info(String.format("Registro(s) deletado(s): %s",entity.toString()));
 		} catch (Exception e) {
 			log.error(String.format("Erro ao executar o método DELETE.\nMensagem: %s",e.getMessage()));
@@ -96,64 +97,16 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 		
 	}
 
-
-	@Override
-	@GetMapping(value = "/{get}/",produces = {MediaType.APPLICATION_JSON_VALUE,
-											  MediaTypes.HAL_JSON_VALUE})
-	@ResponseStatus(HttpStatus.OK)
-	public Resources<RegistroPonto> get() {
-		List<RegistroPonto> allRegistros = new ArrayList<RegistroPonto>();
-		allRegistros.addAll(registroService.get());
-		List<RegistroPonto> all = new ArrayList<RegistroPonto>();
-		try {
-			for(RegistroPonto registro : allRegistros) {
-				String registroId = String.valueOf(registro.getIdRegistro());
-				Link selfLink = linkTo(RegistroPonto.class).slash(registroId).withSelfRel();
-				registro.add(selfLink);
-				all.add(registro);
-			}
-			
-			Link link = linkTo(RegistroPonto.class).withSelfRel();
-			Resources<RegistroPonto> result = new Resources<RegistroPonto>(all,link);
-			log.info(String.format("Registro(s) recuperados(s): %s",all.toString()));
-			return result;
-		} catch (Exception e) {
-			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s",e.getMessage()));
-		}
-		return null;
-	}
-	
-	@Override
-	@GetMapping(value = "/get/{id}",produces = {MediaType.APPLICATION_JSON_VALUE,
-											MediaType.APPLICATION_XML_VALUE,
-											MediaTypes.HAL_JSON_VALUE})
-	@ResponseStatus(HttpStatus.OK)
-	public Resource<RegistroPonto> get(@PathVariable Long id) {
-		
-		try {
-			RegistroPonto registro = registroService.get(id);
-			  
-			Link link = linkTo(RegistroPonto.class).slash(registro).withSelfRel();
-			Resource<RegistroPonto> result = new Resource<RegistroPonto>(registro, link);
-			log.info(String.format("Registro recuperado: %s",result.toString()));
-			return result;
-		} catch (Exception e) {
-			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s",e.getMessage()));
-		}
-		return null;
-	}
-
-
 	@Override
 	@PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
 							 MediaType.APPLICATION_XML_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void patch(@RequestBody RegistroPonto entity) {
+	public void patch(@RequestBody Usuario entity) {
 		
 		try {
-			registroService.patch(entity);
+			service.patch(entity);
 			log.info(String.format("Registro atualizado: %s",entity.toString()));
-			Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
+			Link link = linkTo(Usuario.class).slash(entity.getId()).withSelfRel();
 		} catch (Exception e) {
 			log.error(String.format("Erro ao executar o método PATCH.\nMensagem: %s",e.getMessage()));
 		}
@@ -162,7 +115,21 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 
 
 	@Override
-	public void put(String email) {
+	public Resources<Usuario> get() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Resource<Usuario> get(Long id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void put(Usuario entity) {
 		// TODO Auto-generated method stub
 		
 	}
