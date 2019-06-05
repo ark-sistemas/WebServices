@@ -68,8 +68,7 @@ public class UsuarioController implements GenericOperationsController<Usuario>{
 
 
 	@Override
-	@PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-							MediaType.APPLICATION_XML_VALUE})
+	@PutMapping(consumes = {MediaType.ALL_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void put(@RequestBody String email) {
 			

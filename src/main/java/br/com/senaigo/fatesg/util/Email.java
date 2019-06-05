@@ -13,13 +13,9 @@ import javax.mail.internet.MimeMessage;
 
 public class Email {
 	
-	public static void main(String[] args) {
-		email();
-	}
-	
-	public static void email() {
+	public static void enviarEmail(String email, String senha) {
 		Properties props = new Properties();
-
+//			configuração para HotMail
 		props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.host", "smtp.live.com");
         props.put("mail.smtp.socketFactory.port", "587");
@@ -28,6 +24,7 @@ public class Email {
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "587");
 		
+//        configuração para o GMAIL
 //		props.put("mail.smtp.host", "smtp.gmail.com");
 //		props.put("mail.smtp.socketFactory.port", "465");
 //		props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
@@ -50,14 +47,15 @@ public class Email {
 		      //Remetente
 		 
 		      Address[] toUser = InternetAddress //Destinatário(s)
-		                 .parse("kleitonp@gmail.com");  
+		                 .parse(email);  
 		 
 		      message.setRecipients(Message.RecipientType.TO, toUser);
-		      message.setSubject("Enviando email com JavaMail");//Assunto
-		      message.setText("Enviei este email utilizando JavaMail com minha conta GMail!");
+		      message.setSubject("Nova Senha");//Assunto
+		      message.setText("Conforme solicitado segue a nova senha: "+senha);
 		      /**Método para enviar a mensagem criada*/
 		      Transport.send(message);
-		 
+		      System.out.println("Email: "+ email);
+		      System.out.println("Senha: "+ senha);
 		      System.out.println("Feito!!!");
 		 
 		     } catch (MessagingException e) {

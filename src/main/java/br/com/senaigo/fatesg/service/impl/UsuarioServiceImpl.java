@@ -17,10 +17,12 @@ import br.com.senaigo.fatesg.entity.RegistroPonto;
 import br.com.senaigo.fatesg.entity.Usuario;
 import br.com.senaigo.fatesg.repositories.UsuarioRepository;
 import br.com.senaigo.fatesg.service.UsuarioService;
+import br.com.senaigo.fatesg.util.Email;
+import br.com.senaigo.fatesg.util.GerarSenha;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
-	RegistroPonto registro = new RegistroPonto();
+	//Usuario registro = new Usuario();
 
 	Logger logger = LoggerFactory.getLogger(UsuarioServiceImpl.class);
 
@@ -50,17 +52,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 			logger.debug("\tMétodo PUT executado.");
 			logger.debug("\tMétodo PUT invocado");
 			logger.debug(String.format("\tValor recebido: %s", email));
-
+			
 			for (Usuario usuario : usuarioRepository.findAll()) {
 				if (usuario.getLogin().equals(email)) {
-					for (int i = 0; i < 9; i++) {
-						senha = String.valueOf(ran.nextInt(9));
-					}
+					senha = GerarSenha.getRandomPass(8);
+//					for (int i = 0; i < 9; i++) {
+//						senha += String.valueOf(ran.nextInt(9));
+//					}
 					userAux = usuario;
 				}
 			}
+			Email.enviarEmail(userAux.getLogin(), senha);
 			userAux.setSenha(UtilHash.gerarStringHash(senha, Algoritimo.MD5));
-
 			usuarioRepository.save(userAux);
 
 			logger.info(String.format("\tValor alterado: %s", userAux.toString()));
