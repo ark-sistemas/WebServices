@@ -146,14 +146,16 @@ public class JustificativaController implements GenericOperationsController<Just
 	@PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
 							 MediaType.APPLICATION_XML_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void patch(@RequestBody Justificativa entity) {
+	public boolean patch(@RequestBody Justificativa entity) {
 		
 		try {
 			registroService.patch(entity);
 			log.info(String.format("Registro atualizado: %s",entity.toString()));
 			Link link = linkTo(Justificativa.class).slash(entity.getId()).withSelfRel();
+			return true;
 		} catch (Exception e) {
 			log.error(String.format("Erro ao executar o método PATCH.\nMensagem: %s",e.getMessage()));
+			return false;
 		}
 		
 	}

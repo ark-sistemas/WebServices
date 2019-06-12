@@ -94,7 +94,7 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 
 	@Override
 	@Transactional
-	public void patch(RegistroPonto entity) {
+	public boolean patch(RegistroPonto entity) {
 		try {
 			logger.debug("\tMétodo PATCH executado.");
 			logger.debug("\tMétodo PATCH invocado");
@@ -103,8 +103,10 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 			registroRepository.save(entity);
 			
 			logger.info(String.format("\tValor alterado: %s", entity.toString()));
+			return true;
 		} catch (Exception e) {
 			logger.error(String.format("Error ao atualizar. \nMensagem:%s", e.getMessage()));
+			return false;
 		}
 
 	}
@@ -195,6 +197,12 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 	public void put(String email) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean login(RegistroPonto entity) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

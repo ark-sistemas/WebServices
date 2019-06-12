@@ -148,14 +148,16 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 	@PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
 							 MediaType.APPLICATION_XML_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void patch(@RequestBody RegistroPonto entity) {
+	public boolean patch(@RequestBody RegistroPonto entity) {
 		
 		try {
 			registroService.patch(entity);
 			log.info(String.format("Registro atualizado: %s",entity.toString()));
 			Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
+			return true;
 		} catch (Exception e) {
 			log.error(String.format("Erro ao executar o método PATCH.\nMensagem: %s",e.getMessage()));
+			return false;
 		}
 		
 	}

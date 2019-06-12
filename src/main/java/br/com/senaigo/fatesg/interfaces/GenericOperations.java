@@ -9,7 +9,9 @@ public interface GenericOperations<E> {
 	void put(String email);
 	void put(E entity);
 	void delete(E entity);
-	void patch(E entity);
+	//void patch(E entity);
+	boolean patch(E entity);
+	boolean login(E entity);
 	
 	List<E> post(List<E> entities);
 	void put(List<E> entities);
