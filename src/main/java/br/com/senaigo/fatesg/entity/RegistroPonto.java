@@ -40,6 +40,7 @@ public class RegistroPonto extends ResourceSupport implements Serializable{
 	private String data;
 	private Long idFuncionario;
 	private Long idcodigoJornadaTrabalho;
+	private String email;
 	private String primeiraEntrada;
 	private String primeiraSaida;
 	private String segundaEntrada;
