@@ -148,7 +148,7 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 	@PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
 							 MediaType.APPLICATION_XML_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public boolean patch(@RequestBody RegistroPonto entity) {
+	public Boolean patch(@RequestBody RegistroPonto entity) {
 		
 		try {
 			registroService.patch(entity);

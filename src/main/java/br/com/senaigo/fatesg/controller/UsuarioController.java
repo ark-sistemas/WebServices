@@ -41,7 +41,7 @@ public class UsuarioController implements GenericOperationsController<Usuario>{
 	
 	@PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
 @ResponseStatus(HttpStatus.CREATED)
-public boolean patch(@RequestBody Usuario entity) {
+public Boolean patch(@RequestBody Usuario entity) {
 		
 		try {
 			
@@ -79,7 +79,7 @@ public boolean patch(@RequestBody Usuario entity) {
 		return null;
 	}
 
-
+	//alterar a senha
 	@Override
 	@PutMapping(consumes = {MediaType.ALL_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)

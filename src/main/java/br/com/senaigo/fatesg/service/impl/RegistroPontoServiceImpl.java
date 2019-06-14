@@ -27,11 +27,24 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 	@Transactional
 	public RegistroPonto post(RegistroPonto entity) {
 		try {
+			RegistroPonto aux;
 			logger.debug("\tMétodo POST executado.");
 			logger.debug("\tMétodo POST invocado");
 			logger.debug(String.format("\tValor recebido: %s", entity.toString()));
-
-			RegistroPonto rg = registroRepository.save(entity);
+			
+//			aux = registroRepository.getOne(entity.getIdRegistro());
+//			if(aux.getPrimeiraEntrada() == null) {
+//				aux.setPrimeiraEntrada(entity.getPrimeiraEntrada());
+//			} else if(aux.getSegundaEntrada() == null) {
+//				aux.setSegundaEntrada(entity.getSegundaEntrada());
+//			} else if(aux.getPrimeiraSaida() == null) {
+//				aux.setPrimeiraSaida(entity.getPrimeiraSaida());
+//			} else {
+//				aux.setSegundaSaida(entity.getSegundaSaida());
+//			}
+			RegistroPonto rg =  registroRepository.save(entity);
+			
+//			 = registroRepository.save(entity);
 
 			logger.info(String.format("\tValor persistido: %s", entity.toString()));
 			return rg;
@@ -62,13 +75,33 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 	@Transactional
 	public void put(RegistroPonto entity) {
 		try {
+			RegistroPonto aux = new RegistroPonto();
 			logger.debug("\tMétodo PUT executado.");
 			logger.debug("\tMétodo PUT invocado");
 			logger.debug(String.format("\tValor recebido: %s", entity.toString()));
+			List<RegistroPonto> list = new ArrayList<RegistroPonto>();
+			list = registroRepository.findAll();
+			for (int i = 0; i < list.size(); i++) {
+				RegistroPonto func = list.get(i);
+				if(func.getEmail().equals(entity.getEmail())) {
+					if(func.getData().equals(entity.getData())) {
+						aux = func;
+					}
+				} 
+			}
+			//aux = registroRepository.getOne(entity.getIdRegistro());
+			if(aux.getPrimeiraEntrada() == null || aux.getPrimeiraEntrada().isEmpty() || aux.getPrimeiraEntrada().equals("")) {
+				aux.setPrimeiraEntrada(entity.getPrimeiraEntrada());
+			} else if(aux.getPrimeiraSaida() == null || aux.getPrimeiraSaida().isEmpty() || aux.getPrimeiraSaida().equals("")) {
+				aux.setPrimeiraSaida(entity.getPrimeiraSaida());
+			} else if(aux.getSegundaEntrada() == null || aux.getSegundaEntrada().isEmpty() || aux.getSegundaEntrada().equals("")) {
+				aux.setSegundaEntrada(entity.getSegundaEntrada());
+			}  else if(aux.getSegundaSaida() == null || aux.getSegundaSaida().isEmpty() || aux.getSegundaSaida().equals("")){
+				aux.setSegundaSaida(entity.getSegundaSaida());
+			}
+			registroRepository.save(aux);
 			
-			registroRepository.save(entity);
-			
-			logger.info(String.format("\tValor alterado: %s", entity.toString()));
+			logger.info(String.format("\tValor alterado: %s", aux.toString()));
 		} catch (Exception e) {
 			logger.error(String.format("Error ao alterar registro. \nMensagem:%s", e.getMessage()));
 		}
@@ -94,7 +127,7 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 
 	@Override
 	@Transactional
-	public boolean patch(RegistroPonto entity) {
+	public Boolean patch(RegistroPonto entity) {
 		try {
 			logger.debug("\tMétodo PATCH executado.");
 			logger.debug("\tMétodo PATCH invocado");

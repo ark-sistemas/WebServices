@@ -93,7 +93,7 @@ public class JustificativaServiceImpl implements JustificativaService {
 
 	@Override
 	@Transactional
-	public boolean patch(Justificativa entity) {
+	public Boolean patch(Justificativa entity) {
 		try {
 			logger.debug("\tMétodo PATCH executado.");
 			logger.debug("\tMétodo PATCH invocado");

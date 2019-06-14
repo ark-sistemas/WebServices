@@ -146,7 +146,7 @@ public class JustificativaController implements GenericOperationsController<Just
 	@PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
 							 MediaType.APPLICATION_XML_VALUE})
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public boolean patch(@RequestBody Justificativa entity) {
+	public Boolean patch(@RequestBody Justificativa entity) {
 		
 		try {
 			registroService.patch(entity);
