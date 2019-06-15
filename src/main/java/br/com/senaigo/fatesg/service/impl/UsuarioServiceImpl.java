@@ -33,12 +33,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return null;
 	}
 
-	@Override
-	public Usuario get(Long id) {
-
-		return null;
-
-	}
+//	@Override
+//	public Usuario get(Long id) {
+//
+//		return null;
+//
+//	}
 
 	@Override
 	@Transactional
@@ -143,6 +143,18 @@ public class UsuarioServiceImpl implements UsuarioService {
 	public boolean login(Usuario entity) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+//	@Override
+//	public List<Usuario> get(String email) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
+	@Override
+	public List<Usuario> patch(String email) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

@@ -117,11 +117,11 @@ public Boolean patch(@RequestBody Usuario entity) {
 	}
 
 
-	@Override
-	public Resource<Usuario> get(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public Resource<Usuario> get(Long id) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 
 	@Override
@@ -129,5 +129,17 @@ public Boolean patch(@RequestBody Usuario entity) {
 		// TODO Auto-generated method stub
 		
 	}
+
+@Override
+public Resources<Usuario> patch(String email) {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+//	@Override
+//	public Resources<Usuario> get(String email) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }

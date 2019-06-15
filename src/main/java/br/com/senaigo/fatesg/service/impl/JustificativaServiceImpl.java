@@ -41,22 +41,22 @@ public class JustificativaServiceImpl implements JustificativaService {
 		}
 	}
 
-	@Override
-	public Justificativa get(Long id) {
-		try {
-			logger.debug("\tMétodo GET executado.");
-			logger.debug("\tMétodo GET invocado");
-			logger.debug(String.format("\tValor recebido: %s", id.toString()));
-
-			registro = repository.getOne(id);
-			
-			logger.info(String.format("\tValor buscado: %s", registro.toString()));
-			return registro;
-		} catch (Exception e) {
-			logger.error(String.format("Error ao buscar registro. \nMensagem:%s", e.getMessage()));
-			return null;
-		}
-	}
+//	@Override
+//	public Justificativa get(Long id) {
+//		try {
+//			logger.debug("\tMétodo GET executado.");
+//			logger.debug("\tMétodo GET invocado");
+//			logger.debug(String.format("\tValor recebido: %s", id.toString()));
+//
+//			registro = repository.getOne(id);
+//			
+//			logger.info(String.format("\tValor buscado: %s", registro.toString()));
+//			return registro;
+//		} catch (Exception e) {
+//			logger.error(String.format("Error ao buscar registro. \nMensagem:%s", e.getMessage()));
+//			return null;
+//		}
+//	}
 
 	@Override
 	@Transactional
@@ -203,6 +203,18 @@ public class JustificativaServiceImpl implements JustificativaService {
 	public boolean login(Justificativa entity) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+//	@Override
+//	public List<Justificativa> get(String email) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
+	@Override
+	public List<Justificativa> patch(String email) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

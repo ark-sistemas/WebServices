@@ -54,22 +54,22 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 		}
 	}
 
-	@Override
-	public RegistroPonto get(Long id) {
-		try {
-			logger.debug("\tMétodo GET executado.");
-			logger.debug("\tMétodo GET invocado");
-			logger.debug(String.format("\tValor recebido: %s", id.toString()));
-
-			registro = registroRepository.getOne(id);
-			
-			logger.info(String.format("\tValor buscado: %s", registro.toString()));
-			return registro;
-		} catch (Exception e) {
-			logger.error(String.format("Error ao buscar registro. \nMensagem:%s", e.getMessage()));
-			return null;
-		}
-	}
+//	@Override
+//	public RegistroPonto get(Long id) {
+//		try {
+//			logger.debug("\tMétodo GET executado.");
+//			logger.debug("\tMétodo GET invocado");
+//			logger.debug(String.format("\tValor recebido: %s", id.toString()));
+//
+//			registro = registroRepository.getOne(id);
+//			
+//			logger.info(String.format("\tValor buscado: %s", registro.toString()));
+//			return registro;
+//		} catch (Exception e) {
+//			logger.error(String.format("Error ao buscar registro. \nMensagem:%s", e.getMessage()));
+//			return null;
+//		}
+//	}
 
 	@Override
 	@Transactional
@@ -236,6 +236,29 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 	public boolean login(RegistroPonto entity) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public List<RegistroPonto> patch(String email) {
+		try {
+			List<RegistroPonto> listAux = new ArrayList<RegistroPonto>();
+			List<RegistroPonto> list = new ArrayList<RegistroPonto>();
+			logger.debug("\tMétodo GET LIST executado.");
+			logger.debug("\tMétodo GET LIST invocado");
+			listAux = registroRepository.findAll();
+			for (RegistroPonto registroPonto : listAux) {
+				if(registroPonto.getEmail().equals(email)) {
+					list.add(registroPonto);
+				}
+			}
+			
+//			list = (registroRepository.getOne(id));
+			logger.info(String.format("\t lista buscada: %s",list.toString()));
+			return list;
+		} catch (Exception e) {
+			logger.error(String.format("Error ao get lista. \nMensagem:%s", e.getMessage()));
+			return null;
+		}
 	}
 
 }

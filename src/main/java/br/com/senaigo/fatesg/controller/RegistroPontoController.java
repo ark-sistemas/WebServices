@@ -31,141 +31,148 @@ import br.com.senaigo.fatesg.service.RegistroPontoService;
 
 @RestController
 @RequestMapping("/registro")
-public class RegistroPontoController implements GenericOperationsController<RegistroPonto>{
-	
-	
+public class RegistroPontoController implements GenericOperationsController<RegistroPonto> {
+
 	Logger log = LoggerFactory.getLogger(RegistroPontoController.class);
 
-	
 	@Autowired
 	public RegistroPontoService registroService;
-	
-	
-	@PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-			 				MediaType.APPLICATION_XML_VALUE},
-				produces = {MediaType.APPLICATION_JSON_VALUE,
-							MediaType.APPLICATION_XML_VALUE,
-							MediaTypes.HAL_JSON_VALUE})
+
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }, produces = {
+			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaTypes.HAL_JSON_VALUE })
 	@ResponseStatus(HttpStatus.CREATED)
 	public Resource<RegistroPonto> post(@RequestBody RegistroPonto entity) {
-		
 
 		try {
 			registroService.post(entity);
 			log.info("Registro inserido");
-			
+
 			Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
-			Resource<RegistroPonto> result = new Resource<RegistroPonto>(entity,link);
-			
+			Resource<RegistroPonto> result = new Resource<RegistroPonto>(entity, link);
+
 			return result;
 		} catch (Exception e) {
-			log.error(String.format("Erro ao executar o método POST.\nMensagem: %s",e.getMessage()));
+			log.error(String.format("Erro ao executar o método POST.\nMensagem: %s", e.getMessage()));
 		}
-			
+
 		return null;
 	}
 
-
 	@Override
-	@PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-							MediaType.APPLICATION_XML_VALUE})
+	@PutMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void put(@RequestBody RegistroPonto entity) {
-			
-			try {
-				registroService.put(entity);
-				log.info(String.format("Registro atualizado: %s",entity.toString()));
-				//Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
-			} catch (Exception e) {
-				log.error(String.format("Erro ao executar o método PUT.\nMensagem: %s",e.getMessage()));
-			}
+
+		try {
+			registroService.put(entity);
+			log.info(String.format("Registro atualizado: %s", entity.toString()));
+			// Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
+		} catch (Exception e) {
+			log.error(String.format("Erro ao executar o método PUT.\nMensagem: %s", e.getMessage()));
+		}
 	}
 
-
 	@Override
-	@DeleteMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-							MediaType.APPLICATION_XML_VALUE})
+	@DeleteMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@RequestBody RegistroPonto entity) {
 		try {
 			registroService.delete(entity);
-			log.info(String.format("Registro(s) deletado(s): %s",entity.toString()));
+			log.info(String.format("Registro(s) deletado(s): %s", entity.toString()));
 		} catch (Exception e) {
-			log.error(String.format("Erro ao executar o método DELETE.\nMensagem: %s",e.getMessage()));
+			log.error(String.format("Erro ao executar o método DELETE.\nMensagem: %s", e.getMessage()));
 		}
-		
+
 	}
 
-
 	@Override
-	@GetMapping(value = "/{get}/",produces = {MediaType.APPLICATION_JSON_VALUE,
-											  MediaTypes.HAL_JSON_VALUE})
+	@GetMapping(value = "/{get}/", produces = { MediaType.APPLICATION_JSON_VALUE, MediaTypes.HAL_JSON_VALUE })
 	@ResponseStatus(HttpStatus.OK)
 	public Resources<RegistroPonto> get() {
 		List<RegistroPonto> allRegistros = new ArrayList<RegistroPonto>();
 		allRegistros.addAll(registroService.get());
 		List<RegistroPonto> all = new ArrayList<RegistroPonto>();
 		try {
-			for(RegistroPonto registro : allRegistros) {
+			for (RegistroPonto registro : allRegistros) {
 				String registroId = String.valueOf(registro.getIdRegistro());
 				Link selfLink = linkTo(RegistroPonto.class).slash(registroId).withSelfRel();
 				registro.add(selfLink);
 				all.add(registro);
 			}
-			
+
 			Link link = linkTo(RegistroPonto.class).withSelfRel();
-			Resources<RegistroPonto> result = new Resources<RegistroPonto>(all,link);
-			log.info(String.format("Registro(s) recuperados(s): %s",all.toString()));
+			Resources<RegistroPonto> result = new Resources<RegistroPonto>(all, link);
+			log.info(String.format("Registro(s) recuperados(s): %s", all.toString()));
 			return result;
 		} catch (Exception e) {
-			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s",e.getMessage()));
+			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s", e.getMessage()));
 		}
 		return null;
 	}
-	
-	@Override
-	@GetMapping(value = "/get/{id}",produces = {MediaType.APPLICATION_JSON_VALUE,
-											MediaType.APPLICATION_XML_VALUE,
-											MediaTypes.HAL_JSON_VALUE})
+
+//	@Override
+//	@GetMapping(value = "/get/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+//			MediaTypes.HAL_JSON_VALUE })
+//	@ResponseStatus(HttpStatus.OK)
+//	public Resource<RegistroPonto> get(@PathVariable Long id) {
+//
+//		try {
+//			RegistroPonto registro = registroService.get(id);
+//
+//			Link link = linkTo(RegistroPonto.class).slash(registro).withSelfRel();
+//			Resource<RegistroPonto> result = new Resource<RegistroPonto>(registro, link);
+//			log.info(String.format("Registro recuperado: %s", result.toString()));
+//			return result;
+//		} catch (Exception e) {
+//			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s", e.getMessage()));
+//		}
+//		return null;
+//	}
+	//serviço para retornar todos os registros do usuario.
+	@PatchMapping(value = "/patch/{email}",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
+			MediaTypes.HAL_JSON_VALUE })
 	@ResponseStatus(HttpStatus.OK)
-	public Resource<RegistroPonto> get(@PathVariable Long id) {
-		
+	public Resources<RegistroPonto> patch(@RequestBody String email) {
+		List<RegistroPonto> all = new ArrayList<RegistroPonto>();
 		try {
-			RegistroPonto registro = registroService.get(id);
-			  
-			Link link = linkTo(RegistroPonto.class).slash(registro).withSelfRel();
-			Resource<RegistroPonto> result = new Resource<RegistroPonto>(registro, link);
-			log.info(String.format("Registro recuperado: %s",result.toString()));
+			all = registroService.patch(email);
+
+			Link link = linkTo(RegistroPonto.class).withSelfRel();
+			Resources<RegistroPonto> result = new Resources<RegistroPonto>(all, link);
+			log.info(String.format("Registro(s) recuperados(s): %s", all.toString()));
 			return result;
 		} catch (Exception e) {
-			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s",e.getMessage()));
+			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s", e.getMessage()));
 		}
 		return null;
 	}
 
-
 	@Override
-	@PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE,
-							 MediaType.APPLICATION_XML_VALUE})
+	@PatchMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public Boolean patch(@RequestBody RegistroPonto entity) {
-		
+
 		try {
 			registroService.patch(entity);
-			log.info(String.format("Registro atualizado: %s",entity.toString()));
+			log.info(String.format("Registro atualizado: %s", entity.toString()));
 			Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
 			return true;
 		} catch (Exception e) {
-			log.error(String.format("Erro ao executar o método PATCH.\nMensagem: %s",e.getMessage()));
+			log.error(String.format("Erro ao executar o método PATCH.\nMensagem: %s", e.getMessage()));
 			return false;
 		}
-		
-	}
 
+	}
 
 	@Override
 	public void put(String email) {
 		// TODO Auto-generated method stub
 		
 	}
+
+//	@Override
+//	public void put(String email) {
+//		// TODO Auto-generated method stub
+//
+//	}
 }

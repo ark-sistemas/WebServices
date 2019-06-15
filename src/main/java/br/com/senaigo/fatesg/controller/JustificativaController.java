@@ -120,26 +120,26 @@ public class JustificativaController implements GenericOperationsController<Just
 		return null;
 	}
 
-	@Override
-	@GetMapping(value = "/{registro}/{id}",consumes = {MediaType.APPLICATION_JSON_VALUE,
-							MediaType.APPLICATION_XML_VALUE},
-				produces = {MediaType.APPLICATION_JSON_VALUE,
-							MediaType.APPLICATION_XML_VALUE,
-							MediaTypes.HAL_JSON_VALUE})
-	@ResponseStatus(HttpStatus.OK)
-	public Resource<Justificativa> get(@PathVariable Long id) {
-		
-		try {
-			Justificativa registro = registroService.get(id);
-			log.info(String.format("Registro recuperado: %s",registro.toString()));  
-			Link link = linkTo(Justificativa.class).slash(registro).withSelfRel();
-			Resource<Justificativa> result = new Resource<Justificativa>(registro, link);
-			return result;
-		} catch (Exception e) {
-			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s",e.getMessage()));
-		}
-		return null;
-	}
+//	@Override
+//	@GetMapping(value = "/{registro}/{id}",consumes = {MediaType.APPLICATION_JSON_VALUE,
+//							MediaType.APPLICATION_XML_VALUE},
+//				produces = {MediaType.APPLICATION_JSON_VALUE,
+//							MediaType.APPLICATION_XML_VALUE,
+//							MediaTypes.HAL_JSON_VALUE})
+//	@ResponseStatus(HttpStatus.OK)
+//	public Resource<Justificativa> get(@PathVariable Long id) {
+//		
+//		try {
+//			Justificativa registro = registroService.get(id);
+//			log.info(String.format("Registro recuperado: %s",registro.toString()));  
+//			Link link = linkTo(Justificativa.class).slash(registro).withSelfRel();
+//			Resource<Justificativa> result = new Resource<Justificativa>(registro, link);
+//			return result;
+//		} catch (Exception e) {
+//			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s",e.getMessage()));
+//		}
+//		return null;
+//	}
 
 
 	@Override
@@ -165,5 +165,19 @@ public class JustificativaController implements GenericOperationsController<Just
 	public void put(String email) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+//	@Override
+//	public Resources<Justificativa> get(String email) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
+
+	@Override
+	public Resources<Justificativa> patch(String email) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
