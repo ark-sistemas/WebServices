@@ -46,14 +46,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 		try {
 			Random ran = new Random();
 			Usuario userAux = new Usuario();
-			String senha = null;
+			String senha = "Conforme solicitado segue a nova senha: ";
 			logger.debug("\tMétodo PUT executado.");
 			logger.debug("\tMétodo PUT invocado");
 			logger.debug(String.format("\tValor recebido: %s", email));
 			
 			for (Usuario usuario : usuarioRepository.findAll()) {
 				if (usuario.getLogin().equals(email)) {
-					senha = GerarSenha.getRandomPass(8);
+					senha += GerarSenha.getRandomPass(8);
 					userAux = usuario;
 				}
 			}

@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.senaigo.fatesg.entity.RegistroPonto;
+import br.com.senaigo.fatesg.entity.Usuario;
 import br.com.senaigo.fatesg.repositories.RegistroPontoRepository;
+import br.com.senaigo.fatesg.repositories.UsuarioRepository;
 import br.com.senaigo.fatesg.service.RegistroPontoService;
+import br.com.senaigo.fatesg.util.Email;
 
 @Service
 public class RegistroPontoServiceImpl implements RegistroPontoService {
@@ -22,29 +25,30 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 
 	@Autowired
 	public RegistroPontoRepository registroRepository;
+	@Autowired
+	public UsuarioRepository usuarioRepository;
+	
 
 	@Override
 	@Transactional
 	public RegistroPonto post(RegistroPonto entity) {
 		try {
+			String emailSupervisor = "rolegogm@gmail.com";
 			RegistroPonto aux;
+			String email = "";
 			logger.debug("\tMétodo POST executado.");
 			logger.debug("\tMétodo POST invocado");
 			logger.debug(String.format("\tValor recebido: %s", entity.toString()));
-			
-//			aux = registroRepository.getOne(entity.getIdRegistro());
-//			if(aux.getPrimeiraEntrada() == null) {
-//				aux.setPrimeiraEntrada(entity.getPrimeiraEntrada());
-//			} else if(aux.getSegundaEntrada() == null) {
-//				aux.setSegundaEntrada(entity.getSegundaEntrada());
-//			} else if(aux.getPrimeiraSaida() == null) {
-//				aux.setPrimeiraSaida(entity.getPrimeiraSaida());
-//			} else {
-//				aux.setSegundaSaida(entity.getSegundaSaida());
-//			}
+			Long entradaAux = Long.parseLong(entity.getPrimeiraEntrada().substring(3, 5));
+			if(entradaAux >= 30) {
+				for (Usuario rp : usuarioRepository.findAll()) {
+					if(rp.getLogin().equals(entity.getEmail())) {
+						email = "Funcionario "+rp.getNome()+" chegou atrasado às "+entity.getPrimeiraEntrada();
+					}
+				}
+				Email.enviarEmail(emailSupervisor, email);
+			}
 			RegistroPonto rg =  registroRepository.save(entity);
-			
-//			 = registroRepository.save(entity);
 
 			logger.info(String.format("\tValor persistido: %s", entity.toString()));
 			return rg;

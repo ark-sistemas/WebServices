@@ -50,8 +50,8 @@ public class Email {
 		                 .parse(email);  
 		 
 		      message.setRecipients(Message.RecipientType.TO, toUser);
-		      message.setSubject("Nova Senha");//Assunto
-		      message.setText("Conforme solicitado segue a nova senha: "+senha);
+		      message.setSubject("ARK Sistemas");//Assunto
+		      message.setText(senha);
 		      /**Método para enviar a mensagem criada*/
 		      Transport.send(message);
 		      System.out.println("Email: "+ email);
