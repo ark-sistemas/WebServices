@@ -4,7 +4,6 @@
 	
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<class>br.com.senaigo.fatesg.entity.RegistroPonto</class>
-		<class>br.com.senaigo.fatesg.entity.Justificativa</class>
 		
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/ControlePonto" />

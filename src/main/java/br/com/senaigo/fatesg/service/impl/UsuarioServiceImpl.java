@@ -69,7 +69,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 	
 	@Override
-	public Boolean patch(Usuario entity) {
+	public Usuario patch(Usuario entity) {
 		logger.debug("\tMétodo LOGIN executado.");
 		logger.debug("\tMétodo LOGIN invocado");
 		logger.debug(String.format("\tValor recebido: %s", entity.toString()));
@@ -77,11 +77,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 			if (usuario.getLogin().equals(entity.getLogin())) {
 				if(usuario.getSenha().equals(UtilHash.gerarStringHash(entity.getSenha(), Algoritimo.MD5))) {
 					System.out.println("senha OK");
-					return true;
+					return entity;
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 	
 	@Override

@@ -41,16 +41,21 @@ public class UsuarioController implements GenericOperationsController<Usuario>{
 	
 	@PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
 @ResponseStatus(HttpStatus.CREATED)
-public Boolean patch(@RequestBody Usuario entity) {
+public Resource<Usuario> patch(@RequestBody Usuario entity) {
 		
 		try {
 			
 			log.info("Registro inserido");
-			return serviceImpl.patch(entity);
+			service.patch(entity);
+			
+			Link link = linkTo(Usuario.class).slash(entity.getId()).withSelfRel();
+			Resource<Usuario> result = new Resource<Usuario>(entity,link);
+			
+			return result;
 
 			} catch (Exception e) {
 				log.error(String.format("Erro ao executar o método POST.\nMensagem: %s",e.getMessage()));
-				return false;
+				return null;
 			}
 
 }

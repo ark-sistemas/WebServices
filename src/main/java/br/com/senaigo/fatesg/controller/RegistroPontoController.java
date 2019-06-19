@@ -110,24 +110,6 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 		return null;
 	}
 
-//	@Override
-//	@GetMapping(value = "/get/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
-//			MediaTypes.HAL_JSON_VALUE })
-//	@ResponseStatus(HttpStatus.OK)
-//	public Resource<RegistroPonto> get(@PathVariable Long id) {
-//
-//		try {
-//			RegistroPonto registro = registroService.get(id);
-//
-//			Link link = linkTo(RegistroPonto.class).slash(registro).withSelfRel();
-//			Resource<RegistroPonto> result = new Resource<RegistroPonto>(registro, link);
-//			log.info(String.format("Registro recuperado: %s", result.toString()));
-//			return result;
-//		} catch (Exception e) {
-//			log.error(String.format("Erro ao executar o método GET.\nMensagem: %s", e.getMessage()));
-//		}
-//		return null;
-//	}
 	//serviço para retornar todos os registros do usuario.
 	@PatchMapping(value = "/patch/{email}",produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE,
 			MediaTypes.HAL_JSON_VALUE })
@@ -150,16 +132,18 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 	@Override
 	@PatchMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public Boolean patch(@RequestBody RegistroPonto entity) {
+	public Resource<RegistroPonto> patch(@RequestBody RegistroPonto entity) {
 
 		try {
 			registroService.patch(entity);
 			log.info(String.format("Registro atualizado: %s", entity.toString()));
 			Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
-			return true;
+			Resource<RegistroPonto> result = new Resource<RegistroPonto>(entity, link);
+
+			return result;
 		} catch (Exception e) {
 			log.error(String.format("Erro ao executar o método PATCH.\nMensagem: %s", e.getMessage()));
-			return false;
+			return null;
 		}
 
 	}

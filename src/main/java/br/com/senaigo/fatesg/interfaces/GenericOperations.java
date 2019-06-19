@@ -10,7 +10,7 @@ public interface GenericOperations<E> {
 	void put(E entity);
 	void delete(E entity);
 	//void patch(E entity);
-	Boolean patch(E entity);
+	E patch(E entity);
 	boolean login(E entity);
 	
 	List<E> post(List<E> entities);

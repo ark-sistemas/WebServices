@@ -49,7 +49,7 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 				Email.enviarEmail(emailSupervisor, email);
 			}
 			RegistroPonto rg =  registroRepository.save(entity);
-
+			Email.enviarEmail(entity.getEmail(), "Ponto registrado às: "+entity.getPrimeiraEntrada());
 			logger.info(String.format("\tValor persistido: %s", entity.toString()));
 			return rg;
 		} catch (Exception e) {
@@ -57,23 +57,6 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 			return null;
 		}
 	}
-
-//	@Override
-//	public RegistroPonto get(Long id) {
-//		try {
-//			logger.debug("\tMétodo GET executado.");
-//			logger.debug("\tMétodo GET invocado");
-//			logger.debug(String.format("\tValor recebido: %s", id.toString()));
-//
-//			registro = registroRepository.getOne(id);
-//			
-//			logger.info(String.format("\tValor buscado: %s", registro.toString()));
-//			return registro;
-//		} catch (Exception e) {
-//			logger.error(String.format("Error ao buscar registro. \nMensagem:%s", e.getMessage()));
-//			return null;
-//		}
-//	}
 
 	@Override
 	@Transactional
@@ -96,12 +79,16 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 			//aux = registroRepository.getOne(entity.getIdRegistro());
 			if(aux.getPrimeiraEntrada() == null || aux.getPrimeiraEntrada().isEmpty() || aux.getPrimeiraEntrada().equals("")) {
 				aux.setPrimeiraEntrada(entity.getPrimeiraEntrada());
+				Email.enviarEmail(entity.getEmail(), "Ponto registrado às: "+entity.getPrimeiraEntrada());
 			} else if(aux.getPrimeiraSaida() == null || aux.getPrimeiraSaida().isEmpty() || aux.getPrimeiraSaida().equals("")) {
 				aux.setPrimeiraSaida(entity.getPrimeiraSaida());
+				Email.enviarEmail(entity.getEmail(), "Ponto registrado às: "+entity.getPrimeiraSaida());
 			} else if(aux.getSegundaEntrada() == null || aux.getSegundaEntrada().isEmpty() || aux.getSegundaEntrada().equals("")) {
 				aux.setSegundaEntrada(entity.getSegundaEntrada());
+				Email.enviarEmail(entity.getEmail(), "Ponto registrado às: "+entity.getSegundaEntrada());
 			}  else if(aux.getSegundaSaida() == null || aux.getSegundaSaida().isEmpty() || aux.getSegundaSaida().equals("")){
 				aux.setSegundaSaida(entity.getSegundaSaida());
+				Email.enviarEmail(entity.getEmail(), "Ponto registrado às: "+entity.getSegundaSaida());
 			}
 			registroRepository.save(aux);
 			
@@ -131,19 +118,19 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 
 	@Override
 	@Transactional
-	public Boolean patch(RegistroPonto entity) {
+	public RegistroPonto patch(RegistroPonto entity) {
 		try {
 			logger.debug("\tMétodo PATCH executado.");
 			logger.debug("\tMétodo PATCH invocado");
 			logger.debug(String.format("\tValor recebido: %s", entity.toString()));
 			
-			registroRepository.save(entity);
+			RegistroPonto rp = registroRepository.save(entity);
 			
 			logger.info(String.format("\tValor alterado: %s", entity.toString()));
-			return true;
+			return rp;
 		} catch (Exception e) {
 			logger.error(String.format("Error ao atualizar. \nMensagem:%s", e.getMessage()));
-			return false;
+			return null;
 		}
 
 	}
