@@ -13,5 +13,5 @@ public interface GenericOperationsController<E> {
 	Resources<E> patch(String email); // get 200
 //	Resource<E> get(Long id); // get 200
 	//void patch(E entity); //patch 204
-	Boolean patch(E entity); //patch 204
+	E patch(E entity); //patch 204
 }

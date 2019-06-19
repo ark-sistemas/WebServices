@@ -4,6 +4,7 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -150,16 +151,16 @@ public class RegistroPontoController implements GenericOperationsController<Regi
 	@Override
 	@PatchMapping(consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public Boolean patch(@RequestBody RegistroPonto entity) {
+	public RegistroPonto patch(@RequestBody RegistroPonto entity) {
 
 		try {
-			registroService.patch(entity);
+			RegistroPonto rp = registroService.patch(entity);
 			log.info(String.format("Registro atualizado: %s", entity.toString()));
 			Link link = linkTo(RegistroPonto.class).slash(entity.getId()).withSelfRel();
-			return true;
+			return rp;
 		} catch (Exception e) {
 			log.error(String.format("Erro ao executar o método PATCH.\nMensagem: %s", e.getMessage()));
-			return false;
+			return null;
 		}
 
 	}

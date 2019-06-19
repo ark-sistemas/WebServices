@@ -127,19 +127,19 @@ public class RegistroPontoServiceImpl implements RegistroPontoService {
 
 	@Override
 	@Transactional
-	public Boolean patch(RegistroPonto entity) {
+	public RegistroPonto patch(RegistroPonto entity) {
 		try {
 			logger.debug("\tMétodo PATCH executado.");
 			logger.debug("\tMétodo PATCH invocado");
 			logger.debug(String.format("\tValor recebido: %s", entity.toString()));
 			
-			registroRepository.save(entity);
+			RegistroPonto rp = registroRepository.save(entity);
 			
 			logger.info(String.format("\tValor alterado: %s", entity.toString()));
-			return true;
+			return rp;
 		} catch (Exception e) {
 			logger.error(String.format("Error ao atualizar. \nMensagem:%s", e.getMessage()));
-			return false;
+			return null;
 		}
 
 	}

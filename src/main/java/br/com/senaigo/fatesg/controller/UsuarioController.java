@@ -41,7 +41,7 @@ public class UsuarioController implements GenericOperationsController<Usuario>{
 	
 	@PatchMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
 @ResponseStatus(HttpStatus.CREATED)
-public Boolean patch(@RequestBody Usuario entity) {
+public Usuario patch(@RequestBody Usuario entity) {
 		
 		try {
 			
@@ -50,7 +50,7 @@ public Boolean patch(@RequestBody Usuario entity) {
 
 			} catch (Exception e) {
 				log.error(String.format("Erro ao executar o método POST.\nMensagem: %s",e.getMessage()));
-				return false;
+				return null;
 			}
 
 }

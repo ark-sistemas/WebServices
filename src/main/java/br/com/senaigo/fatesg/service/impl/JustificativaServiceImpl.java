@@ -93,19 +93,19 @@ public class JustificativaServiceImpl implements JustificativaService {
 
 	@Override
 	@Transactional
-	public Boolean patch(Justificativa entity) {
+	public Justificativa patch(Justificativa entity) {
 		try {
 			logger.debug("\tMétodo PATCH executado.");
 			logger.debug("\tMétodo PATCH invocado");
 			logger.debug(String.format("\tValor recebido: %s", entity.toString()));
 			
-			repository.save(entity);
+			Justificativa j = repository.save(entity);
 			
 			logger.info(String.format("\tValor alterado: %s", entity.toString()));
-			return true;
+			return j;
 		} catch (Exception e) {
 			logger.error(String.format("Error ao atualizar. \nMensagem:%s", e.getMessage()));
-			return false;
+			return null;
 		}
 
 	}

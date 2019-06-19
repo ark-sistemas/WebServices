@@ -1,6 +1,8 @@
 package br.com.senaigo.fatesg.service.impl;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 import javax.transaction.Transactional;
@@ -8,6 +10,7 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import br.com.ambientinformatica.util.UtilHash;
@@ -50,9 +53,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 			logger.debug("\tMétodo PUT executado.");
 			logger.debug("\tMétodo PUT invocado");
 			logger.debug(String.format("\tValor recebido: %s", email));
-			
 			for (Usuario usuario : usuarioRepository.findAll()) {
-				if (usuario.getLogin().equals(email)) {
+				if (usuario.getLogin().trim().equals(email.replace("\"", ""))) {
 					senha = GerarSenha.getRandomPass(8);
 					userAux = usuario;
 				}
@@ -69,7 +71,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 	
 	@Override
-	public Boolean patch(Usuario entity) {
+	public Usuario patch(Usuario entity) {
 		logger.debug("\tMétodo LOGIN executado.");
 		logger.debug("\tMétodo LOGIN invocado");
 		logger.debug(String.format("\tValor recebido: %s", entity.toString()));
@@ -77,11 +79,11 @@ public class UsuarioServiceImpl implements UsuarioService {
 			if (usuario.getLogin().equals(entity.getLogin())) {
 				if(usuario.getSenha().equals(UtilHash.gerarStringHash(entity.getSenha(), Algoritimo.MD5))) {
 					System.out.println("senha OK");
-					return true;
+					return usuario;
 				}
 			}
 		}
-		return false;
+		return null;
 	}
 	
 	@Override
